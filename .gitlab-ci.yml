@@ -1,6 +1,3 @@
-cd C:\devops\scolarite
-New-Item -ItemType File -Name ".gitlab-ci.yml" -Force
-notepad .gitlab-ci.yml
 image: eclipse-temurin:21-jdk
 
 variables:

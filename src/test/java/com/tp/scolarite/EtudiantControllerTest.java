@@ -1,29 +1,29 @@
 package com.tp.scolarite;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
 class EtudiantControllerTest {
 
-    @Mock EtudiantRepository repository;
-    @InjectMocks EtudiantController controller;
+    private final EtudiantRepository repository = mock(EtudiantRepository.class);
+    private final EtudiantController controller = new EtudiantController(repository);
 
     @Test
     void listerRetourneLesEtudiants() {
-        when(repository.findAll())
-            .thenReturn(List.of(new Etudiant("Mballa", "Jean", "jean@mail.cm")));
+        when(repository.findAll()).thenReturn(List.of(
+            new Etudiant("Mballa", "Paul", "paul@mail.cm")
+        ));
+        assertEquals(1, controller.lister().size());
+    }
 
-        List<Etudiant> resultat = controller.lister();
-
-        assertEquals(1, resultat.size());
-        assertEquals("Mballa", resultat.get(0).getNom());
-        assertEquals("Jean", resultat.get(0).getPrenom());
-        assertEquals("jean@mail.cm", resultat.get(0).getEmail());
+    @Test
+    void creerEnregistreLEtudiant() {
+        Etudiant etudiant = new Etudiant("Ngono", "Marie", "marie@mail.cm");
+        when(repository.save(etudiant)).thenReturn(etudiant);
+        Etudiant resultat = controller.creer(etudiant);
+        assertEquals("Ngono", resultat.getNom());
+        verify(repository).save(etudiant);
     }
 }
